@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # PostgreSQL for training data
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: mlops
+      POSTGRES_USER: mluser
+      POSTGRES_PASSWORD: mlpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # DynamoDB Local for development
+  dynamodb:
+    image: amazon/dynamodb-local
+    ports:
+      - "8000:8000"
+    volumes:
+      - dynamodb_data:/home/dynamodblocal/data
+
+  # ML Training Service (Python/FastAPI)
+  ml-training:
+    build: ./ml-training
+    ports:
+      - "8001:8000"
+    depends_on:
+      - postgres
+      - dynamodb
+    environment:
+      - DATABASE_URL=postgresql://mluser:mlpass@postgres:5432/mlops
+      - AWS_ENDPOINT_URL=http://dynamodb:8000
+
+  # Model Serving Service (Java/Spring Boot)
+  model-serving:
+    build: ./model-serving
+    ports:
+      - "8002:8080"
+    depends_on:
+      - dynamodb
+    environment:
+      - AWS_ENDPOINT_URL=http://dynamodb:8000
+
+  # Monitoring Service (Go/Gin)
+  monitoring:
+    build: ./monitoring
+    ports:
+      - "8003:8080"
+    depends_on:
+      - dynamodb
+    environment:
+      - AWS_ENDPOINT_URL=http://dynamodb:8000
+
+volumes:
+  postgres_data:
+  dynamodb_data:

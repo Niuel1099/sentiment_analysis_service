@@ -1,57 +1,57 @@
-# 安全漏洞修復總結
+# Security Vulnerability Fixes Summary
 
-## 已修復的安全問題
+## Fixed Security Issues
 
-### 1. Spring CSRF 漏洞 (Low)
+### 1. Spring CSRF Vulnerability (Low)
 
-- **位置**: `model-serving/src/main/java/com/mlops/model_serving/controller/PredictionController.java`
-- **問題**: 缺少 Spring Security 配置，容易受到 CSRF 攻擊
-- **修復方案**:
-  - 添加了 Spring Security 依賴
-  - 創建了 `SecurityConfig.java` 配置類
-  - 啟用了 CSRF 保護
-  - 配置了適當的端點權限控制
-  - 添加了安全標頭配置
+- **Location**: `model-serving/src/main/java/com/mlops/model_serving/controller/PredictionController.java`
+- **Issue**: Missing Spring Security configuration, vulnerable to CSRF attacks
+- **Solution**:
+  - Added Spring Security dependency
+  - Created `SecurityConfig.java` configuration class
+  - Enabled CSRF protection
+  - Configured appropriate endpoint permissions
+  - Added security headers configuration
 
-### 2. 硬編碼密鑰 (High)
+### 2. Hardcoded Secrets (High)
 
-- **位置**: `ml-training/app/utils/db_utils.py` 第 24-25 行
-- **問題**: AWS 憑證硬編碼在代碼中
-- **修復方案**:
-  - 將硬編碼的憑證替換為環境變數
-  - 創建了 `config.env.example` 配置文件範例
-  - 創建了 `.gitignore` 文件避免提交敏感配置
-  - 添加了 `README.md` 說明如何配置環境變數
+- **Location**: `ml-training/app/utils/db_utils.py` lines 24-25
+- **Issue**: AWS credentials hardcoded in code
+- **Solution**:
+  - Replaced hardcoded credentials with environment variables
+  - Created `config.env.example` configuration file template
+  - Created `.gitignore` file to prevent committing sensitive configurations
+  - Added `README.md` with instructions on how to configure environment variables
 
-### 3. 依賴項安全漏洞 (High)
+### 3. Dependency Security Vulnerabilities (High)
 
-- **位置**: `model-serving/pom.xml`
-- **問題**: 多個高嚴重性依賴項漏洞
-  - AWS SDK DynamoDB 1.12.500 中的資源分配漏洞
-  - Spring Boot 3.5.3 中的 Tomcat 漏洞
-  - Spring Framework 6.2.8 中的路徑遍歷漏洞
-- **修復方案**:
-  - 升級 Spring Boot 版本從 3.5.3 到 3.5.5
-  - 升級 AWS SDK DynamoDB 版本從 1.12.500 到 1.12.788
-  - 自動升級相關依賴項到安全版本
+- **Location**: `model-serving/pom.xml`
+- **Issue**: Multiple high-severity dependency vulnerabilities
+  - Resource allocation vulnerability in AWS SDK DynamoDB 1.12.500
+  - Tomcat vulnerability in Spring Boot 3.5.3
+  - Path traversal vulnerability in Spring Framework 6.2.8
+- **Solution**:
+  - Upgraded Spring Boot version from 3.5.3 to 3.5.5
+  - Upgraded AWS SDK DynamoDB version from 1.12.500 to 1.12.788
+  - Automatically upgraded related dependencies to secure versions
 
-### 4. Import 語句問題
+### 4. Import Statement Issues
 
-- **位置**: `model-serving/src/main/java/com/mlops/model_serving/model/ModelService.java`
-- **問題**: 從同一包中導入類的不必要 import 語句
-- **修復方案**: 移除了不必要的 import 語句
+- **Location**: `model-serving/src/main/java/com/mlops/model_serving/model/ModelService.java`
+- **Issue**: Unnecessary import statements from the same package
+- **Solution**: Removed unnecessary import statements
 
-### 5. 測試編譯問題
+### 5. Test Compilation Issues
 
-- **位置**: `model-serving/src/test/java/com/mlops/model_serving/ModelServingApplicationTests.java`
-- **問題**: 測試依賴未正確下載，導致編譯錯誤
-- **修復方案**:
-  - 運行 `./mvnw clean dependency:resolve` 重新下載依賴
-  - 測試代碼現在可以正常編譯和運行
+- **Location**: `model-serving/src/test/java/com/mlops/model_serving/ModelServingApplicationTests.java`
+- **Issue**: Test dependencies not properly downloaded, causing compilation errors
+- **Solution**:
+  - Ran `./mvnw clean dependency:resolve` to re-download dependencies
+  - Test code now compiles and runs normally
 
-## 安全配置改進
+## Security Configuration Improvements
 
-### Spring Security 配置
+### Spring Security Configuration
 
 ```java
 @Configuration
@@ -76,7 +76,7 @@ public class SecurityConfig {
 }
 ```
 
-### 環境變數配置
+### Environment Variables Configuration
 
 ```bash
 # Database Configuration
@@ -89,111 +89,111 @@ AWS_SECRET_ACCESS_KEY=your_actual_secret_key
 AWS_ENDPOINT_URL=http://localhost:8000
 ```
 
-## 剩餘問題及解決方案
+## Remaining Issues and Solutions
 
-### 1. Snyk 測試問題
+### 1. Snyk Testing Issues
 
-**問題**: `snyk test` 無法檢測到支持的項目類型
-**原因**: 各子項目缺少依賴或配置不完整
-**解決方案**:
+**Issue**: `snyk test` cannot detect supported project types
+**Cause**: Missing dependencies or incomplete configuration in sub-projects
+**Solution**:
 
-- **Frontend**: 運行 `npm install` 安裝依賴
-- **ML Training**: 確保 Python 虛擬環境已激活
-- **Monitoring**: 修復 Go 模組路徑問題
+- **Frontend**: Run `npm install` to install dependencies
+- **ML Training**: Ensure Python virtual environment is activated
+- **Monitoring**: Fix Go module path issues
 
-### 2. 容器測試問題
+### 2. Container Testing Issues
 
-**問題**: `snyk container test` 無法檢測到映像
-**原因**: Docker 守護程序未運行
-**解決方案**:
+**Issue**: `snyk container test` cannot detect images
+**Cause**: Docker daemon not running
+**Solution**:
 
-1. 啟動 Docker Desktop
-2. 構建項目映像: `docker-compose build`
-3. 運行容器測試: `snyk container test <image_name>`
+1. Start Docker Desktop
+2. Build project images: `docker-compose build`
+3. Run container tests: `snyk container test <image_name>`
 
-## 安全最佳實踐建議
+## Security Best Practices Recommendations
 
-### 1. 環境變數管理
+### 1. Environment Variables Management
 
-- 使用 `.env` 文件管理本地開發環境變數
-- 在生產環境使用密鑰管理服務（如 AWS Secrets Manager）
-- 永遠不要將包含真實憑證的配置文件提交到版本控制
+- Use `.env` files to manage local development environment variables
+- Use key management services (such as AWS Secrets Manager) in production
+- Never commit configuration files containing real credentials to version control
 
 ### 2. Spring Security
 
-- 啟用 CSRF 保護
-- 配置適當的端點權限
-- 使用強密碼編碼器
-- 添加安全標頭
+- Enable CSRF protection
+- Configure appropriate endpoint permissions
+- Use strong password encoders
+- Add security headers
 
-### 3. 依賴項管理
+### 3. Dependency Management
 
-- 定期更新依賴項到最新安全版本
-- 使用 Snyk 等工具監控依賴項漏洞
-- 設置自動化依賴項更新檢查
+- Regularly update dependencies to the latest secure versions
+- Use tools like Snyk to monitor dependency vulnerabilities
+- Set up automated dependency update checks
 
-### 4. 測試和編譯
+### 4. Testing and Compilation
 
-- 確保測試依賴正確下載
-- 定期運行測試以驗證功能
-- 監控編譯警告和錯誤
+- Ensure test dependencies are properly downloaded
+- Regularly run tests to verify functionality
+- Monitor compilation warnings and errors
 
-### 5. 代碼審查
+### 5. Code Review
 
-- 定期運行 Snyk 安全掃描
-- 檢查依賴項漏洞
-- 審查容器映像安全性
-- 監控第三方庫的安全更新
+- Regularly run Snyk security scans
+- Check dependency vulnerabilities
+- Review container image security
+- Monitor third-party library security updates
 
-## 驗證修復
+## Verification of Fixes
 
-### 代碼安全測試
+### Code Security Testing
 
 ```bash
-# 運行 Snyk 代碼測試
+# Run Snyk code test
 snyk code test
 
-# 結果: ✅ 沒有發現安全問題
+# Result: ✅ No security issues found
 ```
 
-### 依賴項安全測試
+### Dependency Security Testing
 
 ```bash
-# 運行 Snyk 依賴項測試
+# Run Snyk dependency test
 cd model-serving
 snyk test
 
-# 結果: ✅ 沒有發現漏洞，測試了 59 個依賴項
+# Result: ✅ No vulnerabilities found, tested 59 dependencies
 ```
 
-### 編譯測試
+### Compilation Testing
 
 ```bash
-# Java 項目編譯
+# Java project compilation
 cd model-serving
 ./mvnw clean compile
 
-# 結果: ✅ 編譯成功，無錯誤
+# Result: ✅ Compilation successful, no errors
 ```
 
-### 測試運行
+### Test Execution
 
 ```bash
-# 運行測試
+# Run tests
 cd model-serving
 ./mvnw test
 
-# 結果: ✅ 測試通過，1 個測試運行成功
+# Result: ✅ Tests passed, 1 test executed successfully
 ```
 
-## 下一步行動
+## Next Steps
 
-1. **啟動 Docker**: 啟動 Docker Desktop 以進行容器測試
-2. **安裝依賴**: 在各子項目中安裝必要的依賴
-3. **構建映像**: 使用 `docker-compose build` 構建項目映像
-4. **運行測試**: 執行完整的 Snyk 安全測試套件
-5. **持續監控**: 設置定期安全掃描和依賴更新檢查
+1. **Start Docker**: Start Docker Desktop for container testing
+2. **Install Dependencies**: Install necessary dependencies in each sub-project
+3. **Build Images**: Use `docker-compose build` to build project images
+4. **Run Tests**: Execute complete Snyk security test suite
+5. **Continuous Monitoring**: Set up regular security scans and dependency update checks
 
-## 聯繫信息
+## Contact Information
 
-如有安全問題或需要進一步協助，請聯繫安全團隊或創建相關 issue。
+For security issues or further assistance, please contact the security team or create relevant issues.

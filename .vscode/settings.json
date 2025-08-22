@@ -25,6 +25,7 @@
     "numpy",
     "anyio",
     "starlette",
-    "urllib3"
+    "urllib3",
+    "venv"
   ]
 }

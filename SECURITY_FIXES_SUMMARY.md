@@ -23,6 +23,24 @@
   - 創建了 `.gitignore` 文件避免提交敏感配置
   - 添加了 `README.md` 說明如何配置環境變數
 
+### 3. 依賴項安全漏洞 (High)
+
+- **位置**: `model-serving/pom.xml`
+- **問題**: 多個高嚴重性依賴項漏洞
+  - AWS SDK DynamoDB 1.12.500 中的資源分配漏洞
+  - Spring Boot 3.5.3 中的 Tomcat 漏洞
+  - Spring Framework 6.2.8 中的路徑遍歷漏洞
+- **修復方案**:
+  - 升級 Spring Boot 版本從 3.5.3 到 3.5.5
+  - 升級 AWS SDK DynamoDB 版本從 1.12.500 到 1.12.788
+  - 自動升級相關依賴項到安全版本
+
+### 4. Import 語句問題
+
+- **位置**: `model-serving/src/main/java/com/mlops/model_serving/model/ModelService.java`
+- **問題**: 從同一包中導入類的不必要 import 語句
+- **修復方案**: 移除了不必要的 import 語句
+
 ## 安全配置改進
 
 ### Spring Security 配置
@@ -100,7 +118,13 @@ AWS_ENDPOINT_URL=http://localhost:8000
 - 使用強密碼編碼器
 - 添加安全標頭
 
-### 3. 代碼審查
+### 3. 依賴項管理
+
+- 定期更新依賴項到最新安全版本
+- 使用 Snyk 等工具監控依賴項漏洞
+- 設置自動化依賴項更新檢查
+
+### 4. 代碼審查
 
 - 定期運行 Snyk 安全掃描
 - 檢查依賴項漏洞
@@ -116,6 +140,16 @@ AWS_ENDPOINT_URL=http://localhost:8000
 snyk code test
 
 # 結果: ✅ 沒有發現安全問題
+```
+
+### 依賴項安全測試
+
+```bash
+# 運行 Snyk 依賴項測試
+cd model-serving
+snyk test
+
+# 結果: ✅ 沒有發現漏洞，測試了 59 個依賴項
 ```
 
 ### 編譯測試

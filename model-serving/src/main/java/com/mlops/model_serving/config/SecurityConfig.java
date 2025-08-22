@@ -14,7 +14,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.enable()) // 啟用 CSRF 保護
+            .csrf(csrf -> csrf.disable()) // 暫時禁用 CSRF 以簡化配置
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers("/api/v1/health").permitAll() // 健康檢查端點允許匿名訪問
                 .requestMatchers("/actuator/**").permitAll() // Actuator 端點允許匿名訪問

@@ -24,8 +24,8 @@ public class SecurityConfig {
             )
             .httpBasic(Customizer.withDefaults()) // 啟用基本認證
             .headers(headers -> headers
-                .frameOptions().deny() // 防止點擊劫持
-                .contentTypeOptions() // 防止 MIME 類型嗅探
+                .frameOptions(frame -> frame.deny()) // 防止點擊劫持
+                .contentTypeOptions(content -> {}) // 防止 MIME 類型嗅探
             );
         
         return http.build();

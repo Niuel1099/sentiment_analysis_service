@@ -41,6 +41,14 @@
 - **問題**: 從同一包中導入類的不必要 import 語句
 - **修復方案**: 移除了不必要的 import 語句
 
+### 5. 測試編譯問題
+
+- **位置**: `model-serving/src/test/java/com/mlops/model_serving/ModelServingApplicationTests.java`
+- **問題**: 測試依賴未正確下載，導致編譯錯誤
+- **修復方案**:
+  - 運行 `./mvnw clean dependency:resolve` 重新下載依賴
+  - 測試代碼現在可以正常編譯和運行
+
 ## 安全配置改進
 
 ### Spring Security 配置
@@ -124,7 +132,13 @@ AWS_ENDPOINT_URL=http://localhost:8000
 - 使用 Snyk 等工具監控依賴項漏洞
 - 設置自動化依賴項更新檢查
 
-### 4. 代碼審查
+### 4. 測試和編譯
+
+- 確保測試依賴正確下載
+- 定期運行測試以驗證功能
+- 監控編譯警告和錯誤
+
+### 5. 代碼審查
 
 - 定期運行 Snyk 安全掃描
 - 檢查依賴項漏洞
@@ -160,6 +174,16 @@ cd model-serving
 ./mvnw clean compile
 
 # 結果: ✅ 編譯成功，無錯誤
+```
+
+### 測試運行
+
+```bash
+# 運行測試
+cd model-serving
+./mvnw test
+
+# 結果: ✅ 測試通過，1 個測試運行成功
 ```
 
 ## 下一步行動

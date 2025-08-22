@@ -154,6 +154,54 @@ AWS_ENDPOINT_URL=http://localhost:8000
 | ml-training   | ✅ Built     | 21 (Low)           | 6 (High/Medium)     | ⚠️ Needs dependency updates |
 | monitoring    | ✅ Built     | 0                  | 0                   | ✅ Secure                   |
 
+## Individual Sub-Project Security Test Results
+
+### Snyk Test Results for Sub-Projects
+
+#### 1. **Frontend** (`/frontend`)
+
+- **Dependencies Tested**: 3 npm dependencies
+- **Vulnerabilities Found**: ✅ **0 vulnerabilities**
+- **Status**: ✅ **Secure** - No issues detected
+- **Note**: Some engine warnings for Node.js version compatibility
+
+#### 2. **ML-Training** (`/ml-training`)
+
+- **Dependencies Tested**: 30 Python dependencies
+- **Vulnerabilities Found**: ⚠️ **6 vulnerabilities** (8 vulnerable paths)
+  - **High Severity** (3):
+    - `fastapi@0.104.1`: Regular Expression Denial of Service (ReDoS)
+    - `anyio@3.7.1`: Race Condition
+    - `starlette@0.27.0`: Allocation of Resources Without Limits (2 issues)
+  - **Medium Severity** (3):
+    - `scikit-learn@1.3.2`: Storage of Sensitive Data
+    - `starlette@0.27.0`: Resource allocation issue
+    - `urllib3@1.26.20`: Open Redirect
+- **Status**: ⚠️ **Needs Updates** - Multiple high-severity issues
+
+#### 3. **Monitoring** (`/monitoring`)
+
+- **Dependencies Tested**: 97 Go dependencies
+- **Vulnerabilities Found**: ⚠️ **6 vulnerabilities** (9 vulnerable paths)
+  - **High Severity** (4):
+    - `golang.org/x/net/http2@0.10.0`: Denial of Service (DoS)
+    - `golang.org/x/net/http2@0.10.0`: Resource allocation issues (2 issues)
+    - `golang.org/x/net/html@0.10.0`: Denial of Service (DoS)
+  - **Medium Severity** (2):
+    - `golang.org/x/net/html@0.10.0`: Cross-site Scripting (XSS)
+    - `golang.org/x/net/html@0.10.0`: Input validation issue
+- **Status**: ⚠️ **Needs Updates** - Multiple high-severity issues
+
+### Sub-Project Security Summary
+
+| Project     | Dependencies Tested | Vulnerabilities | High Severity | Medium Severity | Status      |
+| ----------- | ------------------- | --------------- | ------------- | --------------- | ----------- |
+| frontend    | 3 npm               | 0               | 0             | 0               | ✅ Secure   |
+| ml-training | 30 Python           | 6               | 3             | 3               | ⚠️ Critical |
+| monitoring  | 97 Go               | 6               | 4             | 2               | ⚠️ Critical |
+
+**Total Issues Found**: 12 vulnerabilities across 2 projects (7 high severity, 5 medium severity)
+
 ## Next Steps for Container Security
 
 ### 1. **Base Image Updates**
@@ -161,10 +209,10 @@ AWS_ENDPOINT_URL=http://localhost:8000
 - Update `model-serving` base image to latest Amazon Linux 2023
 - Update `ml-training` base image to latest Debian with security patches
 
-### 2. **Python Dependency Updates**
+### 2. **Python Dependency Updates (ml-training)**
 
 ```bash
-# Update ml-training requirements.txt
+# Update ml-training/requirements.txt
 fastapi>=0.109.1
 scikit-learn>=1.5.0
 anyio>=4.4.0
@@ -172,7 +220,16 @@ starlette>=0.47.2
 urllib3>=2.5.0
 ```
 
-### 3. **Container Security Best Practices**
+### 3. **Go Dependency Updates (monitoring)**
+
+```bash
+# Update monitoring/go.mod - upgrade gin-gonic/gin and related dependencies
+go get github.com/gin-gonic/gin@latest
+go get golang.org/x/net@latest
+go mod tidy
+```
+
+### 4. **Container Security Best Practices**
 
 - Use multi-stage builds to minimize attack surface
 - Regularly update base images

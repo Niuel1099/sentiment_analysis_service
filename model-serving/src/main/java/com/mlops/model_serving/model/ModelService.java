@@ -5,8 +5,6 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.Table;
-import com.mlops.model_serving.model.PredictionRequest;
-import com.mlops.model_serving.model.PredictionResponse;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;

@@ -111,6 +111,74 @@ AWS_ENDPOINT_URL=http://localhost:8000
 2. Build project images: `docker-compose build`
 3. Run container tests: `snyk container test <image_name>`
 
+## Container Security Test Results
+
+### Docker Images Successfully Built
+
+✅ **model-serving**: Built successfully with JAR file
+✅ **ml-training**: Built successfully with Python dependencies  
+✅ **monitoring**: Built successfully with Go dependencies
+
+### Snyk Container Test Results
+
+#### 1. **model-serving** Image
+
+- **OS Vulnerabilities**: 5 medium/high severity issues
+  - sqlite-libs: Numeric Truncation Error (Medium)
+  - libcap: Improper Certificate Validation (Medium) + CVE-2025-4673 (Medium)
+  - python3-libs: Infinite Loop (High)
+  - python3: Infinite Loop (High)
+- **Application Dependencies**: ✅ No vulnerabilities found (31 Maven dependencies tested)
+- **Status**: Requires base image updates for OS-level fixes
+
+#### 2. **ml-training** Image
+
+- **OS Vulnerabilities**: 21 low severity issues (Debian base)
+  - util-linux, systemd, glibc, coreutils, apt, etc.
+- **Python Dependencies**: 6 vulnerabilities found
+  - **High Severity**: fastapi@0.104.1 (ReDoS), anyio@3.7.1 (Race Condition)
+  - **Medium Severity**: scikit-learn@1.3.2, starlette@0.27.0, urllib3@1.26.20
+- **Status**: Requires Python dependency updates
+
+#### 3. **monitoring** Image
+
+- **OS Vulnerabilities**: ✅ No vulnerabilities found (17 Alpine dependencies tested)
+- **Go Dependencies**: ✅ No vulnerabilities found
+- **Status**: Clean - no security issues detected
+
+### Container Security Summary
+
+| Service       | Image Status | OS Vulnerabilities | App Vulnerabilities | Overall Status              |
+| ------------- | ------------ | ------------------ | ------------------- | --------------------------- |
+| model-serving | ✅ Built     | 5 (Medium/High)    | 0                   | ⚠️ Needs OS updates         |
+| ml-training   | ✅ Built     | 21 (Low)           | 6 (High/Medium)     | ⚠️ Needs dependency updates |
+| monitoring    | ✅ Built     | 0                  | 0                   | ✅ Secure                   |
+
+## Next Steps for Container Security
+
+### 1. **Base Image Updates**
+
+- Update `model-serving` base image to latest Amazon Linux 2023
+- Update `ml-training` base image to latest Debian with security patches
+
+### 2. **Python Dependency Updates**
+
+```bash
+# Update ml-training requirements.txt
+fastapi>=0.109.1
+scikit-learn>=1.5.0
+anyio>=4.4.0
+starlette>=0.47.2
+urllib3>=2.5.0
+```
+
+### 3. **Container Security Best Practices**
+
+- Use multi-stage builds to minimize attack surface
+- Regularly update base images
+- Scan images before deployment
+- Implement image signing and verification
+
 ## Security Best Practices Recommendations
 
 ### 1. Environment Variables Management

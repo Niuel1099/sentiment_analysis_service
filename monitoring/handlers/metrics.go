@@ -1,15 +1,17 @@
 package handlers
 
 import (
-    "net/http"
-    "time"
-    "github.com/nickemma/models"
-    
-    "github.com/gin-gonic/gin"
-    "github.com/aws/aws-sdk-go/aws"
-    "github.com/aws/aws-sdk-go/aws/session"
-    "github.com/aws/aws-sdk-go/service/dynamodb"
-    "strconv"
+	"net/http"
+	"time"
+
+	"github.com/nickemma/models"
+
+	"strconv"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/gin-gonic/gin"
 )
 
 var (

@@ -1,10 +1,12 @@
 package com.mlops.model_serving.controller;
 
-import com.mlops.serving.model.PredictionRequest;
-import com.mlops.serving.model.PredictionResponse;
-import com.mlops.serving.service.ModelService;
+import com.mlops.model_serving.model.PredictionRequest;
+import com.mlops.model_serving.model.PredictionResponse;
+import com.mlops.model_serving.model.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")

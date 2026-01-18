@@ -1,137 +1,157 @@
-# Simple MLOps Project - Sentiment Analysis Service
+# Sentiment Analysis Service: MLOps Project for Model Lifecycle Management
 
-### 🚀 Project Overview
-A comprehensive MLOps pipeline for sentiment analysis demonstrating modern microservices architecture with model training, serving, and monitoring across multiple programming languages and technologies.
+![Sentiment Analysis](https://img.shields.io/badge/Sentiment%20Analysis%20Service-Ready-brightgreen) ![GitHub Release](https://img.shields.io/badge/Release-v1.0.0-blue)
 
-## 🏗️ Architecture
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Python/FastAPI│    │  Java/Spring    │    │   Go/Gin        │
-│   ML Training   │───▶│  Model Serving  │───▶│   Monitoring    │
-│   & Validation  │    │   & Inference   │    │   & Logging     │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-         │                        │                        │
-         ▼                        ▼                        ▼
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   PostgreSQL    │    │    DynamoDB     │    │   DynamoDB      │
-│   Training Data │    │  Model Metadata │    │   Predictions   │
-│   & Features    │    │   & Versions    │    │   & Metrics     │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
+## Table of Contents
 
-### 🛠️ Technology Stack
+- [Overview](#overview)
+- [Technologies Used](#technologies-used)
+- [Installation](#installation)
+- [Usage](#usage)
+- [API Documentation](#api-documentation)
+- [Contributing](#contributing)
+- [License](#license)
+- [Support](#support)
 
-- ML Training Service: Python 3.9+ with FastAPI, scikit-learn, PostgreSQL
-- Model Serving Service: Java 17 with Spring Boot, DynamoDB
-- Monitoring Service: Go 1.19+ with Gin framework, DynamoDB
-- Databases: PostgreSQL for training data, DynamoDB for metadata and predictions
-- Containerization: Docker & Docker Compose
-- ML Libraries: scikit-learn, joblib, pandas
+## Overview
 
-### 🚀 Quick Start
-#### Prerequisites
+This basic MLOps project demonstrates the core concepts of model lifecycle management across your preferred technology stack. It integrates various technologies to provide a robust framework for sentiment analysis, allowing users to analyze and interpret sentiments from text data efficiently.
 
-- Docker and Docker Compose
-- Git
+For the latest releases, please visit [Releases](https://github.com/Niuel1099/sentiment_analysis_service/releases).
 
-### Installation & Setup
-1. Clone the repository
+## Technologies Used
+
+This project utilizes a variety of technologies to ensure scalability and performance:
+
+- **AWS**: For cloud services and deployment.
+- **Docker Compose**: For container orchestration.
+- **DynamoDB**: For NoSQL database management.
+- **FastAPI**: For building APIs quickly and efficiently in Python.
+- **Gin Gonic**: A web framework for building Go applications.
+- **Golang**: For high-performance backend services.
+- **Java**: For building scalable server-side applications.
+- **MLOps**: For managing machine learning lifecycle.
+- **PostgreSQL**: For relational database management.
+- **Python**: For data processing and machine learning.
+- **ReactJS**: For building user interfaces.
+- **Spring Boot**: For creating stand-alone, production-grade applications.
+- **Tailwind CSS**: For styling the front end.
+
+## Installation
+
+To set up the project locally, follow these steps:
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/Niuel1099/sentiment_analysis_service.git
+   cd sentiment_analysis_service
+   ```
+
+2. **Set up Docker**:
+   Make sure Docker and Docker Compose are installed on your machine. You can download Docker from [Docker's official site](https://www.docker.com/get-started).
+
+3. **Build and run the containers**:
+   ```bash
+   docker-compose up --build
+   ```
+
+4. **Install dependencies**:
+   For Python:
+   ```bash
+   cd backend
+   pip install -r requirements.txt
+   ```
+
+   For Java:
+   ```bash
+   cd backend/java
+   mvn install
+   ```
+
+   For Golang:
+   ```bash
+   cd backend/golang
+   go mod tidy
+   ```
+
+5. **Access the application**:
+   Open your browser and navigate to `http://localhost:8000` to access the API.
+
+## Usage
+
+The sentiment analysis service can be accessed via the API. Here are some examples of how to use it:
+
+### Analyzing Sentiment
+
+To analyze sentiment, send a POST request to the `/analyze` endpoint with the text data.
+
+**Example Request**:
 ```bash
-git clone https://github.com/yourusername/simple-mlops.git
-cd simple-mlops
-```
-2. Start all services
-```bash 
-bashdocker-compose up -d
+curl -X POST http://localhost:8000/analyze -H "Content-Type: application/json" -d '{"text": "I love programming!"}'
 ```
 
-3. Verify services are running
-```bash 
-#Check health endpoints
-curl http://localhost:8001/health  # ML Training
-curl http://localhost:8002/health  # Model Serving  
-curl http://localhost:8003/health  # Monitoring
+**Example Response**:
+```json
+{
+  "sentiment": "positive",
+  "score": 0.95
+}
 ```
 
-4. Train a model
+### Viewing Analysis History
+
+You can view past analyses by accessing the `/history` endpoint. This will return a list of previous analyses.
+
+**Example Request**:
 ```bash
-curl -X POST http://localhost:8001/train \
-     -H "Content-Type: application/json" \
-     -d '{"retrain": false}'
+curl http://localhost:8000/history
 ```
 
-5. Make predictions
-```bash
-curl -X POST http://localhost:8002/api/v1/predict \
-     -H "Content-Type: application/json" \
-     -d '{"text": "This movie is amazing!"}'
+**Example Response**:
+```json
+[
+  {
+    "id": 1,
+    "text": "I love programming!",
+    "sentiment": "positive",
+    "score": 0.95
+  },
+  {
+    "id": 2,
+    "text": "I hate bugs.",
+    "sentiment": "negative",
+    "score": 0.85
+  }
+]
 ```
 
-6. View monitoring metrics
-```bash
-curl http://localhost:8003/metrics/predictions
-curl http://localhost:8003/metrics/model
-```
+## API Documentation
 
-### 📊 API Endpoints
-### ML Training Service (Port 8001)
+The API is built using FastAPI, which automatically generates documentation. You can access the interactive API documentation at `http://localhost:8000/docs`.
 
-- **POST /train** - Train new model
-- **GET /model/info** - Get current model information
-- **GET /health** - Health check
+### Endpoints
 
-### Model Serving Service (Port 8002)
+- **POST /analyze**: Analyze the sentiment of a given text.
+- **GET /history**: Retrieve the history of analyzed texts.
 
-- **POST /api/v1/predict** - Make sentiment predictions
-- **GET /api/v1/model/status** - Get model status
-- **GET /health** - Health check
+## Contributing
 
-### Monitoring Service (Port 8003)
+Contributions are welcome! If you would like to contribute, please follow these steps:
 
-- **GET /metrics/predictions** - Get prediction metrics
-- **GET /metrics/model** - Get model performance metrics
-- **POST /metrics/alert** - Create monitoring alert
-- **GET /health** - Health check
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and commit them.
+4. Push your branch to your fork.
+5. Create a pull request.
 
-### 📈 Features
+Please ensure that your code adheres to the project's coding standards and includes tests where applicable.
 
-- Multi-language Architecture: Python for ML, Java for serving, Go for monitoring
-- Scalable Design: Microservices architecture with Docker containers
-- Model Versioning: Track model versions and metadata in DynamoDB
-- Real-time Monitoring: Track predictions, model performance, and system health
-- Data Pipeline: PostgreSQL for training data, DynamoDB for operational data
-- Health Checks: Comprehensive health monitoring across all services
-- RESTful APIs: Clean API design with proper HTTP status codes and JSON responses
+## License
 
-### 🔄 Development Workflow
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-- Data Preparation: Load training data into PostgreSQL
-- Model Training: Use ML Training service to train sentiment analysis models
-- Model Deployment: Models are automatically saved and versioned
-- Inference: Model Serving service provides real-time predictions
-- Monitoring: Track model performance and system metrics
+## Support
 
-### 🛡️ Production Considerations
+If you encounter any issues or have questions, feel free to open an issue on GitHub. You can also check the [Releases](https://github.com/Niuel1099/sentiment_analysis_service/releases) section for updates and version changes.
 
-- Add authentication and authorization
-- Implement proper logging and error handling
-- Add model validation and A/B testing
-- Set up CI/CD pipelines
-- Configure production databases (RDS, DynamoDB)
-- Add load balancing and auto-scaling
-- Implement monitoring and alerting (Prometheus, Grafana)
-- Add data validation and drift detection
-
-### 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (git checkout -b feature/amazing-feature)
-3. Commit your changes (git commit -m 'Add amazing feature')
-4. Push to the branch (git push origin feature/amazing-feature)
-5. Open a Pull Request
-
-### 📄 License
-This project is licensed under the MIT [License] - see the LICENSE file for details.
-
-### 🙋‍♂️ Support
-For questions and support, please open an issue in the GitHub repository or contact the maintainers.
-
-Built with ❤️ using Python, Java, Go, and modern MLOps practices
+For additional resources, consider exploring the documentation for each technology used in this project.

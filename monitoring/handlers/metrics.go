@@ -1,14 +1,17 @@
 package handlers
 
 import (
-    "net/http"
-    "time"
-    "monitoring/models"
-    
-    "github.com/gin-gonic/gin"
-    "github.com/aws/aws-sdk-go/aws"
-    "github.com/aws/aws-sdk-go/aws/session"
-    "github.com/aws/aws-sdk-go/service/dynamodb"
+	"net/http"
+	"time"
+
+	"github.com/nickemma/models"
+
+	"strconv"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/gin-gonic/gin"
 )
 
 var (
@@ -44,9 +47,8 @@ func GetPredictionMetrics(c *gin.Context) {
             positiveCount++
         }
         if confidence := item["confidence"]; confidence != nil {
-            if val, err := confidence.N; err == nil {
-                // Convert string to float (simplified)
-                totalConfidence += 0.8 // Placeholder
+            if val, err := strconv.ParseFloat(*confidence.N, 64); err == nil {
+                totalConfidence += val
             }
         }
     }

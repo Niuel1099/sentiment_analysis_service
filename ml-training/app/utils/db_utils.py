@@ -20,13 +20,13 @@ class DatabaseManager:
             return boto3.resource(
                 'dynamodb',
                 endpoint_url=aws_endpoint,
-                region_name='us-east-1',
-                aws_access_key_id='dummy',
-                aws_secret_access_key='dummy'
+                region_name=os.getenv('AWS_REGION', 'us-east-1'),
+                aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID', 'dummy'),
+                aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY', 'dummy')
             )
         else:
             # AWS DynamoDB
-            return boto3.resource('dynamodb', region_name='us-east-1')
+            return boto3.resource('dynamodb', region_name=os.getenv('AWS_REGION', 'us-east-1'))
     
     async def ensure_dynamodb_tables(self):
         """Ensure DynamoDB tables exist"""

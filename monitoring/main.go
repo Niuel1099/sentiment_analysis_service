@@ -1,7 +1,7 @@
 package main
 
 import (
-	"monitoring/handlers"
+	"github.com/nickemma/handlers"
 
 	"github.com/gin-gonic/gin"
 )
